@@ -9,7 +9,7 @@
 
 @end
 
-@interface JSObjectionInjector : NSObject 
+@interface JSObjectionInjector : NSObject
 
 - (instancetype)initWithContext:(NSDictionary *)theGlobalContext;
 - (instancetype)initWithContext:(NSDictionary *)theGlobalContext andModule:(JSObjectionModule *)theModule;
@@ -34,4 +34,6 @@
 - (id)objectForKeyedSubscript: (id)key;
 - (NSArray *)modules;
 
+- (id)copyWithModule:(JSObjectionModule *)theModule;
+- (id)copyWithoutModuleOfType:(Class)moduleClass;
 @end

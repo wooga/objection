@@ -27,13 +27,16 @@
 }
 
 @end
-  
+
 @interface JSObjectionInjector() {
   NSDictionary *_globalContext;
   NSMutableDictionary *_context;
   NSSet *_eagerSingletons;
   NSMutableArray *_modules;
 }
+
+@property (nonatomic, strong) NSMutableArray *modules;
+@property (nonatomic, strong) NSMutableDictionary *context;
 
 - (void)initializeEagerSingletons;
 - (void)configureDefaultModule;
@@ -66,11 +69,11 @@
 - (instancetype)initWithContext:(NSDictionary *)theGlobalContext andModules:(NSArray *)theModules {
     if ((self = [self initWithContext:theGlobalContext])) {
         for (JSObjectionModule *module in theModules) {
-            [self configureModule:module];      
+            [self configureModule:module];
         }
         [self initializeEagerSingletons];
     }
-    return self;  
+    return self;
 }
 
 - (id)getObject:(id)classOrProtocol {
@@ -121,21 +124,21 @@
         }
         NSString *key = nil;
         BOOL isClass = class_isMetaClass(object_getClass(classOrProtocol));
-        
+
         if (isClass) {
             key = NSStringFromClass(classOrProtocol);
         } else {
             key = [NSString stringWithFormat:@"<%@>", NSStringFromProtocol(classOrProtocol)];
         }
-        
+
         if (name)
         {
             key = [NSString stringWithFormat:@"%@:%@",key,name];
         }
-        
+
         id<JSObjectionEntry> injectorEntry = [_context objectForKey:key];
         injectorEntry.injector = self;
-        
+
         if (!injectorEntry) {
             id<JSObjectionEntry> entry = [_globalContext objectForKey:key];
             if (entry) {
@@ -148,19 +151,19 @@
                 [_context setObject:injectorEntry forKey:key];
             }
         }
-        
+
         if (classOrProtocol && injectorEntry) {
             if ([injectorEntry respondsToSelector:@selector(extractObject:initializer:)]) {
                 return [injectorEntry extractObject:argumentList initializer:selector];
             }
             return [injectorEntry extractObject:argumentList];
         }
-        
+
         return nil;
     }
-    
+
     return nil;
-  
+
 }
 
 - (id)getObject:(id)classOrProtocol named:(NSString*)name argumentList:(NSArray *)argumentList {
@@ -173,22 +176,22 @@
 
 
 - (id)withModule:(JSObjectionModule *)theModule {
-    return [self withModuleCollection:[NSArray arrayWithObject:theModule]];    
+    return [self withModuleCollection:[NSArray arrayWithObject:theModule]];
 }
 
 - (id)withModules:(JSObjectionModule *)first, ... {
     va_list va_modules;
     NSMutableArray *modules = [NSMutableArray arrayWithObject:first];
     va_start(va_modules, first);
-    
+
     JSObjectionModule *module;
     while ((module = va_arg( va_modules, JSObjectionModule *) )) {
         [modules addObject:module];
     }
-    
+
     va_end(va_modules);
     return [self withModuleCollection:modules];
-   
+
 }
 
 - (id)withModuleCollection:(NSArray *)theModules {
@@ -205,12 +208,12 @@
     va_list va_modules;
     NSMutableArray *classes = [NSMutableArray arrayWithObject:first];
     va_start(va_modules, first);
-    
+
     Class aClass;
     while ((aClass = va_arg( va_modules, Class) )) {
         [classes addObject:aClass];
     }
-    
+
     va_end(va_modules);
     return [self withoutModuleCollection:classes];
 
@@ -246,10 +249,10 @@
     for (NSString *eagerSingletonKey in _eagerSingletons) {
         id entry = [_context objectForKey:eagerSingletonKey] ?: [_globalContext objectForKey:eagerSingletonKey];
         if ([entry lifeCycle] == JSObjectionScopeSingleton) {
-            [self getObject:NSClassFromString(eagerSingletonKey)];      
+            [self getObject:NSClassFromString(eagerSingletonKey)];
         } else {
-            @throw [NSException exceptionWithName:@"JSObjectionException" 
-                                           reason:[NSString stringWithFormat:@"Unable to initialize eager singleton for the class '%@' because it was never registered as a singleton", eagerSingletonKey] 
+            @throw [NSException exceptionWithName:@"JSObjectionException"
+                                           reason:[NSString stringWithFormat:@"Unable to initialize eager singleton for the class '%@' because it was never registered as a singleton", eagerSingletonKey]
                                          userInfo:nil];
         }
     }
@@ -268,7 +271,55 @@
     [self configureModule:module];
 }
 
-#pragma mark -
+#pragma mark - Copy Module
 
+- (id)copyWithModule:(JSObjectionModule *)theModule
+{
+    JSObjectionInjector *copy = [self withModule:theModule];
+
+    NSMutableDictionary *context = [self context];
+    [context addEntriesFromDictionary:[copy context]];
+
+    [copy setContext:context];
+    return copy;
+}
+
+- (id)copyWithoutModuleOfType:(Class)moduleClass
+{
+    JSObjectionInjector *copy = [self withoutModuleOfType:moduleClass];
+    NSMutableDictionary *context = [self context];
+
+    NSMutableDictionary *newContext = [self cleanupContext:[context mutableCopy] fromModuleType:moduleClass];
+
+    for (JSObjectionModule *module in [copy modules])
+    {
+        [newContext addEntriesFromDictionary:module.bindings];
+    }
+
+    [copy setContext:newContext];
+
+    return copy;
+}
+
+- (NSMutableDictionary *) cleanupContext:(NSMutableDictionary *)context fromModuleType:(Class)moduleClass
+{
+    NSMutableArray *modules = [self modules];
+
+    for (JSObjectionModule *module in modules) {
+        if([module isKindOfClass:moduleClass])
+        {
+            for(NSString *key in [[module bindings] allKeys])
+            {
+                if(context[key])
+                {
+                    [context removeObjectForKey:key];
+                }
+            }
+        }
+    }
+    return context;
+}
+
+#pragma mark -
 
 @end
