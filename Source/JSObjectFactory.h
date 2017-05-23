@@ -4,7 +4,7 @@
 
 @interface JSObjectFactory : NSObject
 
-@property (nonatomic, readonly, weak) JSObjectionInjector *injector;
+@property (nonatomic, readonly, strong) JSObjectionInjector *injector;
 
 - (instancetype)initWithInjector:(JSObjectionInjector *)injector;
 - (id)getObject:(id)classOrProtocol;
