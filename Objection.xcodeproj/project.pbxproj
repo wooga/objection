@@ -141,7 +141,6 @@
 		4BED513412AA8BF300CA6B36 /* JSObjectionBindingEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BED513112AA8BF300CA6B36 /* JSObjectionBindingEntry.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		835E05571EF9555A001F4C00 /* ObjectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 835E05561EF9555A001F4C00 /* ObjectionTests.m */; };
 		835E05591EF9555A001F4C00 /* libObjection-StaticLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC07E0554694100DB518D /* libObjection-StaticLib.a */; };
-		835E05601EF95588001F4C00 /* InjectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 835E055F1EF95588001F4C00 /* InjectorTests.m */; };
 		D2AAC07E0554694100DB5193 /* CircularDependencySpecs.m in Sources */ = {isa = PBXBuildFile; fileRef = D2AAC07E0554694100DB5192 /* CircularDependencySpecs.m */; };
 		D2AAC07E0554694100DB5194 /* CircularDependencySpecs.m in Sources */ = {isa = PBXBuildFile; fileRef = D2AAC07E0554694100DB5192 /* CircularDependencySpecs.m */; };
 		D2AAC07E0554694100DB5196 /* CircularDependencyFixtures.m in Sources */ = {isa = PBXBuildFile; fileRef = D2AAC07E0554694100DB5195 /* CircularDependencyFixtures.m */; };
@@ -356,7 +355,6 @@
 		835E05541EF9555A001F4C00 /* ObjectionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ObjectionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		835E05561EF9555A001F4C00 /* ObjectionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjectionTests.m; sourceTree = "<group>"; };
 		835E05581EF9555A001F4C00 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		835E055F1EF95588001F4C00 /* InjectorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InjectorTests.m; sourceTree = "<group>"; };
 		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D2AAC07E0554694100DB518D /* libObjection-StaticLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libObjection-StaticLib.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2AAC07E0554694100DB5192 /* CircularDependencySpecs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircularDependencySpecs.m; sourceTree = "<group>"; };
@@ -604,7 +602,6 @@
 			children = (
 				835E05561EF9555A001F4C00 /* ObjectionTests.m */,
 				835E05581EF9555A001F4C00 /* Info.plist */,
-				835E055F1EF95588001F4C00 /* InjectorTests.m */,
 			);
 			path = ObjectionTests;
 			sourceTree = "<group>";
@@ -1021,7 +1018,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				835E05571EF9555A001F4C00 /* ObjectionTests.m in Sources */,
-				835E05601EF95588001F4C00 /* InjectorTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
