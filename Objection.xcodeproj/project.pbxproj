@@ -1564,6 +1564,7 @@
 				835E055D1EF9555A001F4C00 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
