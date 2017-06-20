@@ -98,7 +98,7 @@ static objc_property_t GetProperty(Class klass, NSString *propertyName) {
 
 static id BuildObjectWithInitializer(Class klass, SEL initializer, NSArray *arguments) {
 	NSMethodSignature *signature = [klass methodSignatureForSelector:initializer];
-	__autoreleasing id instance = nil;
+	__strong id instance = nil;
     BOOL isClassMethod = signature != nil && initializer != @selector(init);
     
 	if (!isClassMethod) {
