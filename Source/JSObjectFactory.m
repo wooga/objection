@@ -22,6 +22,20 @@
     return [self.injector getObject:classOrProtocol named:nil initializer:initializer argumentList:arguments];
 }
 
+- (id)getObject:(id)classOrProtocol initializer:(SEL)initializer arguments:(id)firstArg, ...
+{
+    NSMutableArray *arguments = [NSMutableArray array];
+    va_list va_arguments;
+    va_start(va_arguments, firstArg);
+    for (id arg = firstArg; arg != nil; arg = va_arg(va_arguments, id))
+    {
+        [arguments addObject:arg];
+    }
+    va_end(va_arguments);
+    
+    return [self.injector getObject:classOrProtocol named:nil initializer:initializer argumentList:arguments];
+}
+
 - (id)getObject:(id)classOrProtocol named:(NSString *)named withArgumentList:(NSArray *)arguments {
     return [self.injector getObject:classOrProtocol named:named argumentList:arguments];
 }
